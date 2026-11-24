@@ -33,8 +33,12 @@ class MemoryStore implements KvStore {
   String? read(String key) => data[key];
 
   @override
-  Future<void> write(String key, String value) async => data[key] = value;
+  Future<void> write(String key, String value) async {
+    data[key] = value;
+  }
 
   @override
-  Future<void> remove(String key) async => data.remove(key);
+  Future<void> remove(String key) async {
+    data.remove(key);
+  }
 }
