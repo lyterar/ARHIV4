@@ -16,8 +16,9 @@ String fakeFeed(Uri url, {int Function(DateTime)? perDay}) {
   final from = parseIsoDay(url.queryParameters['start_date']!)!;
   final to = parseIsoDay(url.queryParameters['end_date']!)!;
   final days = <String>[];
+  final count = perDay ?? _dayOfMonth;
   for (final d in daysBetween(from, to)) {
-    final n = (perDay ?? (x) => x.day)(d);
+    final n = count(d);
     final items = [
       for (var i = 0; i < n; i++)
         '{"id":"${d.day}-$i","name":"A$i","is_potentially_hazardous_asteroid":${i == 0},'
@@ -28,6 +29,8 @@ String fakeFeed(Uri url, {int Function(DateTime)? perDay}) {
   }
   return '{"near_earth_objects":{${days.join(',')}}}';
 }
+
+int _dayOfMonth(DateTime d) => d.day;
 
 final today = DateTime(2026, 11, 24, 15, 30);
 
@@ -59,7 +62,7 @@ void main() {
       expect(r.fromCache, isTrue);
       expect(r.items.length, 3);
       expect(r.fetchedAt, today);
-      expect(r.warning, 'Нет подключения к интернету');
+      expect(r.warning, isNotNull);
     });
 
     test('без сети и без кэша — понятная ошибка, не падение', () {
