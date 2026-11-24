@@ -53,6 +53,13 @@ class _PeriodScreenState extends State<PeriodScreen> {
         _res = null;
         _err = e.message;
       });
+    } catch (_) {
+      // Страховка: любая непредвиденная ошибка — сообщение, а не красный экран.
+      if (!mounted) return;
+      setState(() {
+        _res = null;
+        _err = 'Непредвиденная ошибка при загрузке данных';
+      });
     } finally {
       if (mounted) setState(() => _loading = false);
     }

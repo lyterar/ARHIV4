@@ -59,6 +59,11 @@ void main() {
     expect(api.fetchFeed(d, d, 'k'), throwsNeo(NeoErrorKind.network));
   });
 
+  test('ошибка TLS (HandshakeException) → network, без падения', () {
+    final api = apiWith((_) async => throw const HandshakeException('bad cert'));
+    expect(api.fetchFeed(d, d, 'k'), throwsNeo(NeoErrorKind.network));
+  });
+
   test('сервер молчит дольше тайм-аута → timeout', () {
     final api = apiWith((_) => Completer<http.Response>().future);
     expect(api.fetchFeed(d, d, 'k'), throwsNeo(NeoErrorKind.timeout));

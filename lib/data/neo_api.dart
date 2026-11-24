@@ -42,6 +42,9 @@ class NeoApi {
       throw const NeoError(NeoErrorKind.network, 'Нет подключения к интернету');
     } on http.ClientException {
       throw const NeoError(NeoErrorKind.network, 'Не удалось связаться с сервером NASA');
+    } on Exception {
+      // TLS-ошибки, обрыв соединения и прочее — тоже «сеть», а не падение приложения.
+      throw const NeoError(NeoErrorKind.network, 'Ошибка соединения с сервером NASA');
     }
 
     final code = res.statusCode;
