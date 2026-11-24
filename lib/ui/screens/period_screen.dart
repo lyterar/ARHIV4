@@ -25,15 +25,11 @@ class PeriodScreen extends StatefulWidget {
   State<PeriodScreen> createState() => _PeriodScreenState();
 }
 
-class _PeriodScreenState extends State<PeriodScreen> with AutomaticKeepAliveClientMixin {
+class _PeriodScreenState extends State<PeriodScreen> {
   Metric _metric = Metric.count;
   bool _loading = false;
   PeriodResult? _res;
   String? _err;
-
-  // Не перезагружать данные при каждом переключении вкладок.
-  @override
-  bool get wantKeepAlive => true;
 
   @override
   void initState() {
@@ -64,7 +60,6 @@ class _PeriodScreenState extends State<PeriodScreen> with AutomaticKeepAliveClie
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
@@ -163,13 +158,13 @@ class _PeriodScreenState extends State<PeriodScreen> with AutomaticKeepAliveClie
           physics: const NeverScrollableScrollPhysics(),
           mainAxisSpacing: 8,
           crossAxisSpacing: 8,
-          childAspectRatio: 2.1,
+          childAspectRatio: 1.7,
           children: [
             StatTile(label: 'Минимум', value: '${fmtNum(st.min, digits: digits)} $unit', hint: ruDay(st.minDay)),
             StatTile(label: 'Максимум', value: '${fmtNum(st.max, digits: digits)} $unit', hint: ruDay(st.maxDay)),
             StatTile(label: 'Среднее', value: '${fmtNum(st.avg, digits: avgDigits)} $unit', hint: 'за ${st.count} дн.'),
             StatTile(
-              label: 'Первый → последний день',
+              label: 'Начало → конец',
               value: '${fmtNum(st.first, digits: digits)} → ${fmtNum(st.last, digits: digits)}',
               hint: unit,
             ),
